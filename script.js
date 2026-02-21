@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 document.addEventListener("DOMContentLoaded", function() {
     console.log("Onigiring Pinoy website loaded successfully!");});
 document.addEventListener("DOMContentLoaded", () => {
@@ -62,3 +63,7 @@ sections.forEach(section => {
     }
 });
 
+=======
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("Onigiring Pinoy website loaded successfully!");});
+>>>>>>> c6b8696495102b14bf6c89827702e689281e2d66
