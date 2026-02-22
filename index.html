@@ -63,30 +63,27 @@
     <button class="order-btn" onclick="openModal()">Order Now</button>
 </section>
 
-<!-- Modal -->
 <div id="orderModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2>Place Your Order</h2>
         
         <form id="orderForm">
-            
-            <!-- Food Options -->
-            <div class="checkbox-group">
-                <label>
-                    <input type="checkbox" name="order[]" value="Tinapang Galunggong">
-                    Tinapang Galunggong
-                </label>
 
-                <label>
-                    <input type="checkbox" name="order[]" value="Adobo Flakes">
-                    Adobo Flakes
-                </label>
+            <!-- Food Items with Quantity -->
+            <div class="item">
+                <label>Tinapang Galunggong</label>
+                <input type="number" name="tinapang_qty" min="0" value="0">
+            </div>
 
-                <label>
-                    <input type="checkbox" name="order[]" value="Sweet Longganisa">
-                    Sweet Longganisa
-                </label>
+            <div class="item">
+                <label>Adobo Flakes</label>
+                <input type="number" name="adobo_qty" min="0" value="0">
+            </div>
+
+            <div class="item">
+                <label>Sweet Longganisa</label>
+                <input type="number" name="longganisa_qty" min="0" value="0">
             </div>
 
             <!-- Customer Info -->
@@ -98,7 +95,6 @@
         </form>
     </div>
 </div>
-
     <section id="about">
         <h2>About Us</h2>
         <p></p>
@@ -110,4 +106,5 @@
         <p>&copy; Onigiring Pinoy. All rights reserved.</p>
     </footer>
 </body> 
+
 </html>
