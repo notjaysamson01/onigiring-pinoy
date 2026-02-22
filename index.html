@@ -13,38 +13,95 @@
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
-                <li><a href="#menu">Menu</a></li>
+                <li><a href="#order-now">order now</a></li>
                 <li><a href="#about">About Us</a></li>
-                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <section id="home">
-        <img src="633947597_1420359096197965_1342911913418100682_n-Photoroom.png" alt="Adobo Onigiri" class="rounded-image">
-        <h2>Welcome to Onigiring Pinoy!</h2>
-        <p>Onigiring Pinoy is a homegrown food business that brings together the heart of Filipino flavors and the tradition of Japanese onigiri. Inspired by the classic rice snack from Ishikawa, Japan, our brand introduces a fresh and exciting twist by infusing it with well-loved Filipino dishes.</p>
-        
-        <h2>Our Concept</h2>
-        <p>Onigiri comes from the Japanese word nigiru, which means “to hold.” Traditionally shaped by hand into a triangle or ball, it is designed for easy handling and mess-free eating. At Onigiring Pinoy, we keep this convenient format but reinvent the fillings to reflect Filipino taste and culture. Each piece is made with premium Japanese rice, seasoned lightly, filled generously, wrapped in nori seaweed, topped with furikake flakes, and sealed with cling wrap to maintain freshness and shape.</p>
-    </section>
+    <section id="home" class="home-section">
 
-    <section id="menu">
+    <div class="home-content">
+        <img src="633947597_1420359096197965_1342911913418100682_n-Photoroom.png" 
+             alt="Adobo Onigiri" 
+             class="rounded-image">
+
+        <h1>Welcome to Onigiring Pinoy!</h1>
+        <p class="intro">
+            Onigiring Pinoy is a homegrown food business that brings together 
+            the heart of Filipino flavors and the tradition of Japanese onigiri.
+            We introduce a fresh twist by infusing this classic rice snack 
+            with well-loved Filipino dishes.
+        </p>
+
+        <h2>Our Concept</h2>
+        <p>
+            The word <strong>onigiri</strong> comes from the Japanese word 
+            <em>nigiru</em>, meaning “to hold.” Traditionally shaped into a 
+            triangle or ball, it is designed for easy handling and mess-free eating.
+            At Onigiring Pinoy, we keep this convenient format while reinventing 
+            the fillings to reflect Filipino taste and culture.
+        </p>
+
+        <p>
+            Each piece is made with premium Japanese rice, lightly seasoned,
+            generously filled, wrapped in nori seaweed, topped with furikake flakes,
+            and sealed to maintain freshness and shape.
+        </p>
+
         <h2>Our Menu</h2>
-        <ul>
-            <li>• Tinapang Galunggong: A smoky, savory filling that highlights a classic Filipino fish favorite.</li>
-            <li>• Adobo Flakes: A timeless Filipino dish transformed into a flavorful rice snack.</li>
-            <li>• Sweet Longganisa: A sweet and savory filling that delivers a familiar, home-style taste.</li>
-        </ul>
-    </section>
+            <p><strong>Tinapang Galunggong</strong> – Smoky and savory, featuring a Filipino fish favorite.</p>
+            <p><strong>Adobo Flakes</strong> – A timeless Filipino classic transformed into a flavorful rice snack.</p>
+            <p><strong>Sweet Longganisa</strong> – Sweet and savory with a comforting home-style taste.</p>
+    </div>
+
+</section>
+
+    <section id="order-now">
+    <h2>Order Now</h2>
+    <p>Place your order using the button below.</p>
+    <button class="order-btn" onclick="openModal()">Order Now</button>
+</section>
+
+<!-- Modal -->
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Place Your Order</h2>
+        
+        <form id="orderForm">
+            
+            <!-- Food Options -->
+            <div class="checkbox-group">
+                <label>
+                    <input type="checkbox" name="order[]" value="Tinapang Galunggong">
+                    Tinapang Galunggong
+                </label>
+
+                <label>
+                    <input type="checkbox" name="order[]" value="Adobo Flakes">
+                    Adobo Flakes
+                </label>
+
+                <label>
+                    <input type="checkbox" name="order[]" value="Sweet Longganisa">
+                    Sweet Longganisa
+                </label>
+            </div>
+
+            <!-- Customer Info -->
+            <input type="text" name="customer_name" placeholder="Your Name" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <textarea name="details" placeholder="Additional Order Details (optional)"></textarea>
+
+            <button type="submit" class="submit-btn">Submit Order</button>
+        </form>
+    </div>
+</div>
 
     <section id="about">
         <h2>About Us</h2>
-            <p>Onigiring Pinoy is a family-owned business that started with a passion for combining traditional Filipino flavors with the beloved Japanese onigiri. We strive to bring you the best of both worlds in every bite.</p>
-        
-    </section>
-
-    <section id="contact">
+        <p></p>
         <h2>Contact Us</h2>
             <p>Email: pogisijayjay12@gmail.com | Phone: +63 912 345 6789</p>
     </section>
