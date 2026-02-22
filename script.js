@@ -61,7 +61,6 @@ document.getElementById("orderForm").addEventListener("submit", function(e) {
     if (tinapang === 0 && adobo === 0 && longganisa === 0) {
         alert("Please order at least one item.");
         e.preventDefault();
-        alert("dumbass");
-        e.preventDefault();
     }
+
 });
