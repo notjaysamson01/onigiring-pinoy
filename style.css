@@ -1,11 +1,11 @@
 body {font-family: Arial, sans-serif;
-    margin: 0;
+    margin-bottom: 0;
     padding: 0;
     background-color: #fff8f0;}
 
-header {background-color: #1cec26;
+header {background-color: #669666;
     color: white;
-    padding: 15px;
+    padding: 16px;
     text-align: center;}
 
 nav ul {list-style: none;
@@ -24,7 +24,7 @@ section { padding: 40px;
 #menu ul {list-style: none;
     padding: 0;}
 
-footer {background-color: #1cec26;
+footer {background-color: #669666;
     color: white;
     text-align: center;
     padding: 10px;}
@@ -55,12 +55,11 @@ nav ul li a {
 /* Hover effect */
 nav ul li a:hover {
     background-color: rgb(255, 255, 255);  /* highlight background */
-    color: #1cec26;            /* text color change */
-}
+    color: #17921d}; /* highlight text color */
 
 section {
     opacity: 1;
-    transition: opacity 0.5s ease; /* smooth fade effect */
+    transition: opacity 0.3s ease; /* smooth fade effect */
     display: block; /* default */
     position: relative;
 }
@@ -156,4 +155,137 @@ input, textarea {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+body {
+  position: relative;
+}
+
+.hamburger {
+  width: 30px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: black; /* change color */
+  margin: 6px 0;
+  border-radius: 2px;
+}
+
+/* Hamburger icon */
+.hamburger {
+  width: 30px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: black;
+  margin: 6px 0;
+  border-radius: 2px;
+}
+
+/* Hidden menu */
+.menu {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100%;
+  background: #111;
+  padding-top: 60px;
+  transition: 0.3s;
+}
+
+/* Menu links */
+.menu a {
+  display: block;
+  color: white;
+  padding: 15px 20px;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background: #333;
+}
+
+/* Show menu when active */
+.menu.active {
+  left: 0;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  width: 300px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.close-account {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+#switchMode {
+  color: blue;
+  cursor: pointer;
+}
+
+/* Modal styling (same as order modal, can reuse) */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  width: 350px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.close-review {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.review-btn {
+  cursor: pointer;
 }
