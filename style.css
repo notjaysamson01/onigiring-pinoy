@@ -1,30 +1,47 @@
-/* ====== Global Styles ====== */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+body {font-family: Arial, sans-serif;
+    margin-bottom: 0;
     padding: 0;
-    background-color: #fff8f0;
-    position: relative;
-}
+    background-color: #fff8f0;}
 
-/* ====== Header ====== */
-header {
-    background-color: #669666;
+header {background-color: #669666;
     color: white;
     padding: 16px;
+    text-align: center;}
+
+nav ul {list-style: none;
+    padding: 0;}
+
+nav ul li {display: inline;
+    margin: 0 15px;}
+
+nav ul li a {color: white;
+    text-decoration: none;
+    font-weight: bold;}
+
+section { padding: 40px;
+    text-align: center;}
+
+#menu ul {list-style: none;
+    padding: 0;}
+
+footer {background-color: #669666;
+    color: white;
     text-align: center;
+    padding: 10px;}
+
+section {transition: opacity 0.5s ease;}
+
+nav ul li a.active {
+    color: rgb(0, 0, 0);      /* Highlight color */
+    font-weight: bold; /* Make it stand out */
+    border-bottom: #000000 3px solid; /* Optional: underline active link */
 }
 
-/* ====== Navigation ====== */
-nav ul {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
+.rounded-image {
+    border-radius: 15px;
+    width: 300px; /* Adjust as needed */
+    height: auto;
+    margin-bottom: 20px;
 }
 
 nav ul li a {
@@ -32,69 +49,46 @@ nav ul li a {
     color: white;           /* default link color */
     padding: 8px 15px;
     border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s; /* smooth hover */
 }
 
+/* Hover effect */
 nav ul li a:hover {
-    background-color: #ffffff;
-    color: #17921d; /* highlight text color */
-}
+    background-color: rgb(255, 255, 255);  /* highlight background */
+    color: #17921d}; /* highlight text color */
 
-nav ul li a.active {
-    color: rgb(0, 0, 0);
-    border-bottom: 3px solid #000;
-}
-
-/* ====== Sections ====== */
 section {
-    padding: 40px;
-    text-align: center;
     opacity: 1;
-    transition: opacity 0.3s ease;
-    display: block;
+    transition: opacity 0.3s ease; /* smooth fade effect */
+    display: block; /* default */
     position: relative;
 }
-
 section.hidden {
     opacity: 0;
-    pointer-events: none;
+    pointer-events: none; /* prevents clicking invisible sections */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
 }
 
-/* Fade-in Animation */
 .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 0;               /* start invisible */
+    transform: translateY(20px); /* slide up effect */
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .fade-in.show {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1;               /* fully visible */
+    transform: translateY(0); /* move into place */
 }
 
-/* ====== Images ====== */
-.rounded-image {
-    border-radius: 15px;
-    width: 300px;
-    height: auto;
-    margin-bottom: 20px;
-}
-
-/* ====== Footer ====== */
-footer {
-    background-color: #669666;
-    color: white;
+#order-now {
     text-align: center;
-    padding: 10px;
+    padding: 40px;
 }
 
-/* ====== Buttons ====== */
-.order-btn, .submit-btn {
+.order-btn {
     padding: 12px 25px;
     background-color: #ff6600;
     color: white;
@@ -102,25 +96,32 @@ footer {
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.order-btn:hover, .submit-btn:hover {
+.order-btn:hover {
     background-color: #e65c00;
 }
 
-/* ====== Inputs ====== */
-input, textarea {
+/* Modal Background */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
     width: 100%;
-    margin-bottom: 12px;
-    padding: 8px;
-    box-sizing: border-box;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
 }
 
-/* ====== Order Section ====== */
-#order-now {
-    text-align: center;
-    padding: 40px;
+/* Modal Content */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 500px;
 }
 
 .item {
@@ -139,90 +140,162 @@ input, textarea {
     padding: 5px;
 }
 
-/* ====== Modals ====== */
+input, textarea {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+body {
+  position: relative;
+}
+
+.hamburger {
+  width: 30px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: black; /* change color */
+  margin: 6px 0;
+  border-radius: 2px;
+}
+
+/* Hamburger icon */
+.hamburger {
+  width: 30px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: black;
+  margin: 6px 0;
+  border-radius: 2px;
+}
+
+/* Hidden menu */
+.menu {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100%;
+  background: #111;
+  padding-top: 60px;
+  transition: 0.3s;
+}
+
+/* Menu links */
+.menu a {
+  display: block;
+  color: white;
+  padding: 15px 20px;
+  text-decoration: none;
+}
+
+.menu a:hover {
+  background: #333;
+}
+
+/* Show menu when active */
+.menu.active {
+  left: 0;
+}
+
 .modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-content {
-    background: white;
-    padding: 30px;
-    width: 350px;
-    max-width: 90%;
-    border-radius: 8px;
-    position: relative;
+  background: white;
+  padding: 30px;
+  width: 300px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.close-account {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+#switchMode {
+  color: blue;
+  cursor: pointer;
+}
+
+/* Modal styling (same as order modal, can reuse) */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  width: 350px;
+  border-radius: 8px;
+  position: relative;
 }
 
 .modal-content input,
 .modal-content textarea {
-    width: 100%;
-    margin: 10px 0;
-    padding: 8px;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
 }
 
-.close-account, .close-review {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    cursor: pointer;
-    font-size: 20px;
+.close-review {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+  font-size: 20px;
 }
 
-/* ====== Review Button ====== */
 .review-btn {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-/* ====== Hamburger Menu ====== */
-.hamburger {
-    width: 30px;
-    cursor: pointer;
-    display: inline-block;
+/* Hide sections initially except home */
+section {
+  display: block;
 }
 
-.hamburger span {
-    display: block;
-    height: 3px;
-    background: black;
-    margin: 6px 0;
-    border-radius: 2px;
+.hidden {
+  display: none;
 }
 
-/* Hidden Menu */
-.menu {
-    position: fixed;
-    top: 0;
-    right: -250px; /* hidden off-screen */
-    width: 250px;
-    height: 100%;
-    background: #111;
-    padding-top: 60px;
-    transition: right 0.3s ease;
-}
-
-.menu a {
-    display: block;
-    color: white;
-    padding: 15px 20px;
-    text-decoration: none;
-}
-
-.menu a:hover {
-    background: #333;
-}
-
-.menu.active {
-    left: 0; /* slide in */
-}
-
-/* ====== Switch Mode Link ====== */
-#switchMode {
-    color: blue;
-    cursor: pointer;
-}

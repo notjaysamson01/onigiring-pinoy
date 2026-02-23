@@ -1,53 +1,108 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --------------------------
-  // Elements
-  // --------------------------
-  const header = document.getElementById("siteHeader");
-  const sections = document.querySelectorAll("section");
-  const navLinks = document.querySelectorAll("#menu a");
-  const hamburgerMenu = document.getElementById("menu");
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll("#menu a");
 
-  // Modals
-  const orderModal = document.getElementById("orderModal");
-  const accountModal = document.getElementById("accountModal");
-  const reviewModal = document.getElementById("reviewModal");
-
-  const accountBtn = document.querySelector(".account-btn");
-  const accountClose = document.querySelector(".close-account");
-  const switchModeElem = document.getElementById("switchMode");
-  const formTitle = document.getElementById("formTitle");
-  const switchText = document.getElementById("switchText");
-  let isLogin = true;
-
-  // --------------------------
-  // Helper Functions
-  // --------------------------
-  function showSection(targetId) {
+    // Hide all sections except home initially
     sections.forEach(section => {
-      section.classList.toggle("hidden", section.id !== targetId);
+        if (section.id !== "home") {
+            section.classList.add("hidden");
+        }
     });
 
-    // Header visibility
-    header.style.display = targetId === "home" ? "none" : "block";
+    navLinks.forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
 
-    // Update active link
-    navLinks.forEach(link => link.classList.remove("active"));
-    const activeLink = document.querySelector(`#menu a[href="#${targetId}"]`);
-    if (activeLink) activeLink.classList.add("active");
+            const targetId = link.getAttribute("href").substring(1);
 
-    // Close hamburger menu (mobile)
-    hamburgerMenu.classList.remove("active");
-  }
+            sections.forEach(section => {
+                if (section.id === targetId) {
+                    section.classList.remove("hidden");
+                } else {
+                    section.classList.add("hidden");
+                }
+            });
 
-  function openModal(modal) {
+            navLinks.forEach(l => l.classList.remove("active"));
+            link.classList.add("active");
+
+            // Close hamburger after click (mobile)
+            document.getElementById("menu").classList.remove("active");
+        });
+    });
+
+
+    // Trigger fade-in for Home section
+    sections[0].querySelectorAll(".fade-in").forEach((el, i) =>
+        setTimeout(() => el.classList.add("show"), i * 150)
+    );
+});
+
+function openModal() {
+    document.getElementById("orderModal").style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("orderModal").style.display = "none";
+}
+
+// Close when clicking outside modal
+window.onclick = function(event) {
+    const modal = document.getElementById("orderModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+
+    const tinapang = parseInt(document.querySelector('[name="tinapang_qty"]').value) || 0;
+    const adobo = parseInt(document.querySelector('[name="adobo_qty"]').value) || 0;
+    const longganisa = parseInt(document.querySelector('[name="longganisa_qty"]').value) || 0;
+
+    if (tinapang === 0 && adobo === 0 && longganisa === 0) {
+        alert("Please order at least one item.");
+        e.preventDefault();
+    }
+    if (tinapang > 100 || adobo > 100 || longganisa > 100) {
+         alert("patay gutom ka ba? 100 lang ang pwede orderin!");
+        e.preventDefault();
+    }
+});
+
+function toggleMenu() {
+  document.getElementById("menu").classList.toggle("active");
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  const accountBtn = document.querySelector(".account-btn");
+  const modal = document.getElementById("accountModal");
+  const closeBtn = document.querySelector(".close-account");
+  const switchMode = document.getElementById("switchMode");
+  const formTitle = document.getElementById("formTitle");
+  const switchText = document.getElementById("switchText");
+
+  let isLogin = true;
+
+  // Open modal
+  accountBtn.addEventListener("click", () => {
     modal.style.display = "flex";
-  }
+  });
 
-  function closeModal(modal) {
+  // Close modal
+  closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
-  }
+  });
 
-  function toggleAccountMode() {
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  // Switch Login / Sign Up
+  switchMode.addEventListener("click", () => {
     isLogin = !isLogin;
 
     if (isLogin) {
@@ -58,83 +113,43 @@ document.addEventListener("DOMContentLoaded", () => {
       switchText.innerHTML = `Already have an account? <span id="switchMode">Login</span>`;
     }
 
-    // Re-attach listener after innerHTML change
-    document.getElementById("switchMode").addEventListener("click", toggleAccountMode);
-  }
-
-  // --------------------------
-  // Initial Setup
-  // --------------------------
-  sections.forEach(section => {
-    if (section.id !== "home") section.classList.add("hidden");
+    // Re-select switchMode after innerHTML change
+    document.getElementById("switchMode").addEventListener("click", arguments.callee);
   });
-  
 
-  // --------------------------
-  // Navigation Links
-  // --------------------------
-  navLinks.forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const targetId = link.getAttribute("href").substring(1).toLowerCase();
-      showSection(targetId);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Elements
+  const reviewModal = document.getElementById("reviewModal");
+  const reviewBtns = document.querySelectorAll(".review-btn");
+  const closeReview = document.querySelector(".close-review");
+  const reviewForm = document.getElementById("reviewForm");
+
+  // Open review modal
+  reviewBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      reviewModal.style.display = "flex";
     });
   });
 
-  // --------------------------
-  // Hamburger toggle
-  // --------------------------
-  window.toggleMenu = () => {
-    hamburgerMenu.classList.toggle("active");
-  };
-
-  // --------------------------
-  // Order Modal
-  // --------------------------
-  window.openModal = () => openModal(orderModal);
-  window.closeModal = () => closeModal(orderModal);
-
-  window.addEventListener("click", e => {
-    if (e.target === orderModal) closeModal(orderModal);
-    if (e.target === reviewModal) closeModal(reviewModal);
-    if (e.target === accountModal) closeModal(accountModal);
+  // Close review modal when clicking "×"
+  closeReview.addEventListener("click", () => {
+    reviewModal.style.display = "none";
   });
 
-  document.getElementById("orderForm").addEventListener("submit", e => {
-    const tinapang = parseInt(document.querySelector('[name="tinapang_qty"]').value) || 0;
-    const adobo = parseInt(document.querySelector('[name="adobo_qty"]').value) || 0;
-    const longganisa = parseInt(document.querySelector('[name="longganisa_qty"]').value) || 0;
-
-    if (tinapang === 0 && adobo === 0 && longganisa === 0) {
-      alert("Please order at least one item.");
-      e.preventDefault();
-    }
-    if (tinapang > 100 || adobo > 100 || longganisa > 100) {
-      alert("Patay gutom ka ba? 100 lang ang pwede orderin!");
-      e.preventDefault();
+  // Close review modal when clicking outside the modal content
+  window.addEventListener("click", (e) => {
+    if (e.target === reviewModal) {
+      reviewModal.style.display = "none";
     }
   });
 
-  // --------------------------
-  // Account Modal
-  // --------------------------
-  accountBtn.addEventListener("click", () => openModal(accountModal));
-  accountClose.addEventListener("click", () => closeModal(accountModal));
-  switchModeElem.addEventListener("click", toggleAccountMode);
-
-  // --------------------------
-  // Review Modal
-  // --------------------------
-  document.querySelectorAll(".review-btn").forEach(btn => {
-    btn.addEventListener("click", () => openModal(reviewModal));
-  });
-
-  document.querySelector(".close-review").addEventListener("click", () => closeModal(reviewModal));
-
-  document.getElementById("reviewForm").addEventListener("submit", e => {
+  // Submit review form
+  reviewForm.addEventListener("submit", (e) => {
     e.preventDefault();
     alert("Thank you for your review!");
     reviewModal.style.display = "none";
-    e.target.reset();
+    reviewForm.reset();
   });
 });
