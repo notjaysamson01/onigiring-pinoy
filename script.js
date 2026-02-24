@@ -27,14 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const fadeEls = document.querySelectorAll(".fade-in");
   fadeEls.forEach((el, i) => setTimeout(() => el.classList.add("show"), i * 200));
 
-  // ===== MOBILE MENU =====
-  window.toggleMobileMenu = function () {
-    document.getElementById("mobileMenu").classList.toggle("active");
-  };
+ // ===== MOBILE MENU =====
+function toggleMobileMenu() {
+  const menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("active");
+}
 
-  document.querySelectorAll('.menu-mobile a').forEach(link => {
-    link.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('active'));
+// Make function accessible to onclick in HTML
+window.toggleMobileMenu = toggleMobileMenu;
+
+// Close menu when any link is clicked
+document.querySelectorAll('#mobileMenu .nav-link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.remove('active');
   });
+});
 
   // ===== CART LOGIC =====
   const cartItems = document.getElementById('cartItems');
@@ -189,6 +196,28 @@ checkoutBtn.addEventListener('click', () => {
     renderFavorites();
     alert(`Logged in as ${user.username}`);
   }
+  function loginUser(user) {
+  currentUser = user;
+  
+  authContainer.style.display = 'none';
+  loginSignUpBtn.style.display = 'none';
+  logoutBtn.style.display = 'inline-block';
+  userPanel.style.display = 'block';
+
+  // Update username in header
+  const navUsername = document.getElementById('navUsername');
+  const navUsernameMobile = document.getElementById('navUsernameMobile');
+
+  navUsername.textContent = currentUser.username;
+  navUsernameMobile.textContent = currentUser.username;
+
+  displayUsername.textContent = currentUser.username;
+
+  renderOrders();
+  renderFavorites();
+
+  alert(`Logged in as ${currentUser.username}`);
+}
 
   logoutBtn.addEventListener('click', () => {
     currentUser = null;
@@ -201,7 +230,14 @@ checkoutBtn.addEventListener('click', () => {
     favoritesList.innerHTML = '';
     alert("Logged out successfully");
   });
+// Clear username from header
+  document.getElementById('navUsername').textContent = '';
+  document.getElementById('navUsernameMobile').textContent = '';
 
+  displayUsername.textContent = '';
+  ordersList.innerHTML = '';
+  favoritesList.innerHTML = '';
+  
   editUsernameBtn.addEventListener('click', () => {
     editUsernameSection.style.display = 'block';
     newUsernameInput.value = currentUser.username;
