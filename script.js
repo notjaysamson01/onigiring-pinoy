@@ -1,155 +1,307 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const sections = document.querySelectorAll("section");
-    const navLinks = document.querySelectorAll("#menu a");
+  // ===== NAVIGATION & SECTION DISPLAY =====
+  const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll("section");
 
-    // Hide all sections except home initially
-    sections.forEach(section => {
-        if (section.id !== "home") {
-            section.classList.add("hidden");
-        }
+  function showSection(targetId) {
+    sections.forEach(sec => {
+      sec.classList.toggle("active", sec.id === targetId);
+      sec.classList.toggle("hidden", sec.id !== targetId);
+    });
+    navLinks.forEach(link => link.classList.toggle("active", link.getAttribute("href") === `#${targetId}`));
+    document.getElementById("mobileMenu").classList.remove("active");
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const targetId = link.getAttribute("href").substring(1);
+      showSection(targetId);
+    });
+  });
+
+  // Show home by default
+  showSection("home");
+
+  // ===== FADE-IN ANIMATION =====
+  const fadeEls = document.querySelectorAll(".fade-in");
+  fadeEls.forEach((el, i) => setTimeout(() => el.classList.add("show"), i * 200));
+
+  // ===== MOBILE MENU =====
+  window.toggleMobileMenu = function () {
+    document.getElementById("mobileMenu").classList.toggle("active");
+  };
+
+  document.querySelectorAll('.menu-mobile a').forEach(link => {
+    link.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('active'));
+  });
+
+  // ===== CART LOGIC =====
+  const cartItems = document.getElementById('cartItems');
+  const totalCount = document.getElementById('totalCount');
+  const totalPrice = document.getElementById('totalPrice');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const addToCartButtons = document.querySelectorAll('.add-to-cart');
+  let cart = [];
+
+  function updateCart() {
+    cartItems.innerHTML = '';
+    let totalItems = 0;
+    let total = 0;
+
+    cart.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.name} x${item.qty} - ₱${(item.price * item.qty).toFixed(2)}`;
+      cartItems.appendChild(li);
+      totalItems += item.qty;
+      total += item.price * item.qty;
     });
 
-    navLinks.forEach(link => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
+    totalCount.textContent = totalItems;
+    totalPrice.textContent = total.toFixed(2);
+  }
 
-            const targetId = link.getAttribute("href").substring(1);
+  addToCartButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const card = button.closest('.product-card');
+    const name = card.dataset.name;
+    const price = parseFloat(card.dataset.price);
+    const qtyInput = card.querySelector('.quantity');
+    const qty = parseInt(qtyInput.value);
 
-            sections.forEach(section => {
-                if (section.id === targetId) {
-                    section.classList.remove("hidden");
-                } else {
-                    section.classList.add("hidden");
-                }
-            });
-
-            navLinks.forEach(l => l.classList.remove("active"));
-            link.classList.add("active");
-
-            // Close hamburger after click (mobile)
-            document.getElementById("menu").classList.remove("active");
-        });
-    });
-
-
-    // Trigger fade-in for Home section
-    sections[0].querySelectorAll(".fade-in").forEach((el, i) =>
-        setTimeout(() => el.classList.add("show"), i * 150)
-    );
-});
-
-function openModal() {
-    document.getElementById("orderModal").style.display = "block";
-}
-
-function closeModal() {
-    document.getElementById("orderModal").style.display = "none";
-}
-
-// Close when clicking outside modal
-window.onclick = function(event) {
-    const modal = document.getElementById("orderModal");
-    if (event.target == modal) {
-        modal.style.display = "none";
+    // Check quantity limit
+    if (isNaN(qty) || qty < 1) {
+      alert("Please enter a valid quantity (1-100).");
+      return;
     }
-}
-
-document.getElementById("orderForm").addEventListener("submit", function(e) {
-
-    const tinapang = parseInt(document.querySelector('[name="tinapang_qty"]').value) || 0;
-    const adobo = parseInt(document.querySelector('[name="adobo_qty"]').value) || 0;
-    const longganisa = parseInt(document.querySelector('[name="longganisa_qty"]').value) || 0;
-
-    if (tinapang === 0 && adobo === 0 && longganisa === 0) {
-        alert("Please order at least one item.");
-        e.preventDefault();
+    if (qty > 100) {
+      alert("You cannot order more than 100 units of a product.");
+      return; // Stop adding to cart
     }
-    if (tinapang > 100 || adobo > 100 || longganisa > 100) {
-         alert("patay gutom ka ba? 100 lang ang pwede orderin!");
-        e.preventDefault();
-    }
-});
 
-function toggleMenu() {
-  document.getElementById("menu").classList.toggle("active");
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-
-  const accountBtn = document.querySelector(".account-btn");
-  const modal = document.getElementById("accountModal");
-  const closeBtn = document.querySelector(".close-account");
-  const switchMode = document.getElementById("switchMode");
-  const formTitle = document.getElementById("formTitle");
-  const switchText = document.getElementById("switchText");
-
-  let isLogin = true;
-
-  // Open modal
-  accountBtn.addEventListener("click", () => {
-    modal.style.display = "flex";
-  });
-
-  // Close modal
-  closeBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-
-  // Switch Login / Sign Up
-  switchMode.addEventListener("click", () => {
-    isLogin = !isLogin;
-
-    if (isLogin) {
-      formTitle.textContent = "Login";
-      switchText.innerHTML = `Don't have an account? <span id="switchMode">Sign Up</span>`;
+    // Check if item already exists in cart
+    const existing = cart.find(item => item.name === name);
+    if (existing) {
+      if (existing.qty + qty > 100) {
+        alert("You cannot have more than 100 units of this product in your cart.");
+        return;
+      }
+      existing.qty += qty;
     } else {
-      formTitle.textContent = "Sign Up";
-      switchText.innerHTML = `Already have an account? <span id="switchMode">Login</span>`;
+      cart.push({ name, price, qty });
     }
 
-    // Re-select switchMode after innerHTML change
-    document.getElementById("switchMode").addEventListener("click", arguments.callee);
+    updateCart(); // Update cart display
   });
-
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Elements
+checkoutBtn.addEventListener('click', () => {
+    if (!currentUser) {
+      alert("You must be logged in to checkout!");
+      authContainer.style.display = 'block';
+      signupForm.style.display = 'block';
+      loginForm.style.display = 'none';
+      return;
+    }
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    let summary = cart.map(item => `${item.name} x${item.qty} - ₱${(item.price * item.qty).toFixed(2)}`).join('\n');
+    alert(`Checkout Summary:\n\n${summary}\n\nTotal Items: ${totalCount.textContent}\nTotal Price: ₱${totalPrice.textContent}`);
+
+    const orderText = cart.map(item => `${item.name} x${item.qty}`).join(', ');
+    if (!currentUser.orders) currentUser.orders = [];
+    currentUser.orders.push(`${new Date().toLocaleDateString()}: ${orderText} (Total ₱${totalPrice.textContent})`);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    renderOrders();
+    cart = [];
+    updateCart();
+  });
+
+  // ===== USER LOGIN / SIGNUP =====
+  const loginSignUpBtn = document.getElementById('loginSignUpBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const authContainer = document.getElementById('authContainer');
+  const signupForm = document.getElementById('signupForm');
+  const loginForm = document.getElementById('loginForm');
+  const userPanel = document.getElementById('userPanel');
+  const userNameDisplay = document.getElementById('userNameDisplay');
+  const displayUsername = document.getElementById('displayUsername');
+  const editUsernameBtn = document.getElementById('editUsernameBtn');
+  const editUsernameSection = document.getElementById('editUsernameSection');
+  const newUsernameInput = document.getElementById('newUsername');
+  const saveUsernameBtn = document.getElementById('saveUsernameBtn');
+  const currentPasswordInput = document.getElementById('currentPassword');
+  const newPasswordInput = document.getElementById('newPassword');
+  const changePasswordBtn = document.getElementById('changePasswordBtn');
+  const ordersList = document.getElementById('ordersList');
+  const favoritesList = document.getElementById('favoritesList');
+  let users = JSON.parse(localStorage.getItem('users')) || [];
+  let currentUser = null;
+
+  loginSignUpBtn.addEventListener('click', () => {
+    authContainer.style.display = 'block';
+    signupForm.style.display = 'block';
+    loginForm.style.display = 'none';
+  });
+
+  document.getElementById('toLogin').addEventListener('click', () => {
+    signupForm.style.display = 'none';
+    loginForm.style.display = 'block';
+  });
+  document.getElementById('toSignup').addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'block';
+  });
+
+  document.getElementById('signupBtn').addEventListener('click', () => {
+    const username = document.getElementById('signupUsername').value.trim().toLowerCase();
+    const password = document.getElementById('signupPassword').value;
+    if (!username || !password) return alert("Enter username and password");
+    if (users.some(u => u.username.toLowerCase() === username)) return alert("Username already exists");
+
+    const newUser = { username, password, orders: [], favorites: [] };
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    loginUser(newUser);
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const username = document.getElementById('loginUsername').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    const user = users.find(u => u.username.toLowerCase() === username && u.password === password);
+    if (!user) return alert("Invalid username or password");
+    loginUser(user);
+  });
+
+  function loginUser(user) {
+    currentUser = user;
+    authContainer.style.display = 'none';
+    loginSignUpBtn.style.display = 'none';
+    logoutBtn.style.display = 'inline-block';
+    userPanel.style.display = 'block';
+    userNameDisplay.textContent = user.username;
+    displayUsername.textContent = user.username;
+    renderOrders();
+    renderFavorites();
+    alert(`Logged in as ${user.username}`);
+  }
+
+  logoutBtn.addEventListener('click', () => {
+    currentUser = null;
+    userPanel.style.display = 'none';
+    loginSignUpBtn.style.display = 'inline-block';
+    logoutBtn.style.display = 'none';
+    userNameDisplay.textContent = '';
+    displayUsername.textContent = '';
+    ordersList.innerHTML = '';
+    favoritesList.innerHTML = '';
+    alert("Logged out successfully");
+  });
+
+  editUsernameBtn.addEventListener('click', () => {
+    editUsernameSection.style.display = 'block';
+    newUsernameInput.value = currentUser.username;
+  });
+
+  saveUsernameBtn.addEventListener('click', () => {
+    const newName = newUsernameInput.value.trim();
+    if (!newName) return alert("Username cannot be empty");
+    if (users.some(u => u.username.toLowerCase() === newName.toLowerCase() && u !== currentUser)) return alert("Username already taken");
+    currentUser.username = newName;
+    localStorage.setItem('users', JSON.stringify(users));
+    userNameDisplay.textContent = newName;
+    displayUsername.textContent = newName;
+    editUsernameSection.style.display = 'none';
+    alert("Username updated!");
+  });
+
+  changePasswordBtn.addEventListener('click', () => {
+    const currentPass = currentPasswordInput.value;
+    const newPass = newPasswordInput.value;
+    if (!currentPass || !newPass) return alert("Fill in both password fields");
+    if (currentPass !== currentUser.password) return alert("Current password incorrect");
+    currentUser.password = newPass;
+    localStorage.setItem('users', JSON.stringify(users));
+    currentPasswordInput.value = '';
+    newPasswordInput.value = '';
+    alert("Password updated successfully!");
+  });
+
+  function renderOrders() {
+    ordersList.innerHTML = '';
+    if (!currentUser.orders || currentUser.orders.length === 0) return ordersList.innerHTML = '<li>No orders yet.</li>';
+    currentUser.orders.forEach(order => {
+      const li = document.createElement('li');
+      li.textContent = order;
+      ordersList.appendChild(li);
+    });
+  }
+
+  function renderFavorites() {
+    favoritesList.innerHTML = '';
+    if (!currentUser.favorites || currentUser.favorites.length === 0) return favoritesList.innerHTML = '<li>No favorites yet.</li>';
+    currentUser.favorites.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      favoritesList.appendChild(li);
+    });
+  }
+
+  // ===== REVIEW MODAL =====
   const reviewModal = document.getElementById("reviewModal");
-  const reviewBtns = document.querySelectorAll(".review-btn");
+  const reviewBtn = document.querySelector(".review-btn");
   const closeReview = document.querySelector(".close-review");
   const reviewForm = document.getElementById("reviewForm");
 
-  // Open review modal
-  reviewBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      reviewModal.style.display = "flex";
-    });
-  });
-
-  // Close review modal when clicking "×"
-  closeReview.addEventListener("click", () => {
-    reviewModal.style.display = "none";
-  });
-
-  // Close review modal when clicking outside the modal content
-  window.addEventListener("click", (e) => {
-    if (e.target === reviewModal) {
-      reviewModal.style.display = "none";
+  reviewBtn.addEventListener("click", () => {
+    if (!currentUser) {
+      alert("You must be logged in to write a review!");
+      authContainer.style.display = "block";
+      signupForm.style.display = "block";
+      loginForm.style.display = "none";
+      return;
     }
+    const reviewName = document.getElementById("reviewName");
+    reviewName.value = currentUser.username;
+    reviewName.readOnly = true;
+    reviewModal.style.display = "flex";
   });
 
-  // Submit review form
-  reviewForm.addEventListener("submit", (e) => {
+  closeReview.addEventListener("click", () => reviewModal.style.display = "none");
+  window.addEventListener("click", e => { if (e.target === reviewModal) reviewModal.style.display = "none"; });
+
+  reviewForm.addEventListener("submit", e => {
     e.preventDefault();
-    alert("Thank you for your review!");
-    reviewModal.style.display = "none";
+    const name = document.getElementById("reviewName").value.trim();
+    const rating = parseInt(document.getElementById("reviewRating").value);
+    const text = document.getElementById("reviewText").value.trim();
+    if (!name || !rating || !text) return;
+    const reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+    reviews.push({ name, rating, text, date: new Date().toLocaleDateString() });
+    localStorage.setItem("reviews", JSON.stringify(reviews));
     reviewForm.reset();
+    reviewModal.style.display = "none";
+    renderReviews();
+    alert("Thank you for your review!");
   });
+
+  function renderReviews() {
+    const reviewsList = document.getElementById("reviewsList");
+    reviewsList.innerHTML = "";
+    const reviews = JSON.parse(localStorage.getItem("reviews")) || [];
+    if (reviews.length === 0) return reviewsList.innerHTML = "<p>No reviews yet. Be the first to review!</p>";
+    reviews.forEach(review => {
+      const div = document.createElement("div");
+      div.classList.add("review-item");
+      const stars = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+      div.innerHTML = `<div class="review-stars">${stars}</div><p><strong>${review.name}</strong> - <em>${review.date}</em></p><p>${review.text}</p><hr>`;
+      reviewsList.appendChild(div);
+    });
+  }
+
+  renderReviews();
 });
